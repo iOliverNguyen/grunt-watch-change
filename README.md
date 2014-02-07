@@ -1,6 +1,6 @@
 # grunt-watch-change
 
-> Execute tasks on files with some preprocessing.
+> Execute tasks on files with some preprocessing options.
 
 
 ## Getting Started
@@ -21,7 +21,7 @@ grunt.loadNpmTasks('grunt-watch-change');
 
 ## Introduction
 
-This add 2 tasks `map` and `watchchange`. `map` will maps source files to dest files and execute tasks while `watchchange` will watch file changes and execute tasks only on changed files.
+This add 2 tasks `map` and `watchchange`. `map` will map source files to dest files and execute tasks while `watchchange` will watch file changes and execute tasks only on changed files.
 
 
 ## Sample usage
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
       }
     },
 
-    // This will
+    // This will clean only generated .js files from .coffee files.
     map: {
       cleancoffee: {
         src: ['src/**/*.coffee'],
@@ -60,6 +60,7 @@ module.exports = function(grunt) {
 
     },
 
+    // This will watch changes on all files inside `src` directory.
     watch: {
       source: {
         files: ['src/**/*.*'],
@@ -67,6 +68,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // This will run tasks based on changed files.
     watchchange: {
       coffee: {
         match: ['src/**/*.coffee'],
@@ -83,11 +85,14 @@ module.exports = function(grunt) {
     }
   };
 
+  // This will check whether input file is generated file or not.
   function notCoffee(file) {
     return !grunt.file.exists(file.replace(/\.js/, '.coffee'));
   };
 
   grunt.initConfig(taskConfig);
+
+  // We must run `watchchange` task before `watch` task.
   grunt.registerTask('watching', ['watchchange', 'watch']);
 }
 ```
@@ -101,11 +106,10 @@ module.exports = function(grunt) {
 - {Array|Function} tasks: Array of tasks or a function which return an array of tasks. Tasks will be executed only if there are at least one file in result.
 ```
 
-### Only "watchchange"
+### Only `watchchange`
 ```js
 - {String} action: One of "added", "deleted" or "changed". If it is not set, all files will be accepted.
 ```
-
 
 ### Processing options (both `map` and `watchchange`)
 
